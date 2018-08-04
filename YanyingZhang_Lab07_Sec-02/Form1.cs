@@ -31,9 +31,9 @@ namespace YanyingZhang_Lab07_Sec_02
                 calculateResult.Text = result.ToString();
                 
             }
-            catch
+            catch(Exception ex)
             {
-                calculateResult.Text = "Invalid input";
+                calculateResult.Text = ex.Message;
             }
         }
 
@@ -44,11 +44,12 @@ namespace YanyingZhang_Lab07_Sec_02
         private void checkBtn_Click(object sender, EventArgs e)
         {
             try
-            {
-                int inputNumber = Convert.ToInt32(checkTxt.Text);
+            {                
                 NumberCheck evenCheck = IsEven;
                 NumberCheck oddCheck = IsOdd;
                 string result = null;
+
+                int inputNumber = Convert.ToInt32(checkTxt.Text);
                 if (evenCheck(inputNumber))
                 {
                     result = " is an even number.";
@@ -59,9 +60,9 @@ namespace YanyingZhang_Lab07_Sec_02
                 }
                 checkResult.Text = checkTxt.Text + result;
             }
-            catch
+            catch(Exception ex)
             {
-                checkResult.Text = "Invalid input";
+                checkResult.Text = ex.Message;
             }
         }
 
@@ -69,17 +70,17 @@ namespace YanyingZhang_Lab07_Sec_02
         private void generateBtn_Click(object sender, EventArgs e)
         {
             Random random = new Random();
-
-            //if (intRdb.Checked)
-            //{
-                int value = random.Next();
-                for(int i=0; i<10; i++)
+            int value;
+            //int[] numberList = new int[10];
+            List<int> numberList = new List<int>();
+            for (int i = 0; i < 10; i++)
             {
-
+                value = random.Next(10, 100);
+                numberList.Add(value);
+                displayListView.Items.Add(value.ToString());
             }
-            //}
+            
         }
 
-        
     }
 }
