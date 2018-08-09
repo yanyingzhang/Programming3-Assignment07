@@ -18,6 +18,7 @@ namespace YanyingZhang_Lab07_Sec_02
             InitializeComponent();
         }
 
+        // GroupBox 1 - Calculate the factorial
         private async void calculateBtn_Click(object sender, EventArgs e)
         {
             try
@@ -53,7 +54,7 @@ namespace YanyingZhang_Lab07_Sec_02
             return result;
         }
 
-
+        // GroupBox 2 - Check number is even or odd
         public delegate bool NumberCheck(int number);
         private static bool IsEven(int number) => number % 2 == 0;
         private static bool IsOdd(int number) => number % 2 == 1;
@@ -90,9 +91,15 @@ namespace YanyingZhang_Lab07_Sec_02
             }
         }
 
+        // GroupBox 3 - Generate 10 random values
         public List<int> intList = new List<int>();
         public List<double> doubleList = new List<double>();
         public List<char> charList = new List<char>();
+        
+        bool intCheck = false;
+        bool doubleCheck = false;
+        bool charCheck = false;
+
         Random random = new Random();
 
         private void generateBtn_Click(object sender, EventArgs e)
@@ -101,14 +108,26 @@ namespace YanyingZhang_Lab07_Sec_02
             if (intRdb.Checked)
             {
                 GenerateValues(intList);
+
+                intCheck = true;
+                doubleCheck = false;
+                charCheck = false;
             }
             if (doubleRdb.Checked)
             {
                 GenerateValues(doubleList);
+
+                intCheck = false;
+                doubleCheck = true;
+                charCheck = false;
             }
             if(charRdb.Checked)
             {
                 GenerateValues(charList);
+
+                intCheck = false;
+                doubleCheck = false;
+                charCheck = true;
             }
         }
 
@@ -148,18 +167,111 @@ namespace YanyingZhang_Lab07_Sec_02
             }
         }
 
-
+        // GroupBox 3 - Search value
         private void searchBtn_Click(object sender, EventArgs e)
         {
-            int searchValue = Convert.ToInt32(searchTxt.Text);
-            if (intList.Contains(searchValue))
+            string searchValue = searchTxt.Text;
+            bool containValue = false;
+            if (intCheck == true)
             {
-                MessageBox.Show("is found");
+                containValue = SearchData(intList, searchValue);
+            }
+            if (doubleCheck == true)
+            {
+                containValue = SearchData(doubleList, searchValue);
+                
+            }
+            if (charCheck == true)
+            {
+                containValue = SearchData(charList, searchValue);
+                
+            }
+
+            if (containValue == true)
+            {
+                MessageBox.Show(searchValue + " is found");
             }
             else
             {
-                MessageBox.Show("is not found");
+                MessageBox.Show(searchValue + " is not found");
             }
+        }
+
+        private bool SearchData<T>(List<T> inputValues, string searchValue ) where T : IComparable<T>
+        {
+            bool valueCheck = false;
+            foreach (var value in inputValues)
+            {
+                if((value.ToString()).CompareTo(searchValue) == 0)
+                {
+                    valueCheck = true;
+                }
+            }
+            return valueCheck;
+        }
+
+        // GroupBox 3 -Display values
+        private void displayBtn_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                List<int> iList = new List<int>();
+                List<double> dList = new List<double>();
+                List<char> cList = new List<char>();
+
+                int lowIndex = Convert.ToInt32(lowIndexTxt.Text);
+                int highIndex = Convert.ToInt32(highIndexTxt.Text);
+                
+                outputTxt.Text = "";
+                if ((lowIndex>=0) && (lowIndex <= highIndex) && (highIndex < 10))
+                { 
+                    if (intCheck == true)
+                    {
+                        iList = PrintData(intList, lowIndex, highIndex);
+                        foreach (var element in iList)
+                        {
+                            outputTxt.Text += element + " ";
+                        }
+                    }
+                    if (doubleCheck == true)
+                    {
+                        dList = PrintData(doubleList, lowIndex, highIndex);
+                        foreach (var element in dList)
+                        {
+                            outputTxt.Text += element + " ";
+                        }
+                    }
+                    if (charCheck == true)
+                    {
+                        cList = PrintData(charList, lowIndex, highIndex);
+                        foreach (var element in cList)
+                        {
+                            outputTxt.Text += element + " ";
+                        }
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Invalid input");
+                }
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private List<T> PrintData<T>(List<T> inputList, int low, int high)
+        {
+            List<T> list = new List<T>();
+            for(int i=0; i < inputList.LongCount(); i++)
+            {
+                if ((i >= low) && (i <= high))
+                {
+                    list.Add(inputList[i]);
+                }
+            }
+            return list;
         }
     }
 }

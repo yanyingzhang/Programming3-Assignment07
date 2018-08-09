@@ -257,6 +257,7 @@
             this.displayBtn.TabIndex = 5;
             this.displayBtn.Text = "Display";
             this.displayBtn.UseVisualStyleBackColor = true;
+            this.displayBtn.Click += new System.EventHandler(this.displayBtn_Click);
             // 
             // searchBtn
             // 
