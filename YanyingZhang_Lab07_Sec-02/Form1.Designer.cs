@@ -77,9 +77,8 @@
             this.calculateResult.AutoSize = true;
             this.calculateResult.Location = new System.Drawing.Point(16, 144);
             this.calculateResult.Name = "calculateResult";
-            this.calculateResult.Size = new System.Drawing.Size(55, 20);
+            this.calculateResult.Size = new System.Drawing.Size(0, 20);
             this.calculateResult.TabIndex = 3;
-            this.calculateResult.Text = "Result";
             // 
             // calculateBtn
             // 
@@ -125,9 +124,8 @@
             this.checkResult.AutoSize = true;
             this.checkResult.Location = new System.Drawing.Point(16, 156);
             this.checkResult.Name = "checkResult";
-            this.checkResult.Size = new System.Drawing.Size(55, 20);
+            this.checkResult.Size = new System.Drawing.Size(0, 20);
             this.checkResult.TabIndex = 3;
-            this.checkResult.Text = "Result";
             // 
             // checkBtn
             // 
@@ -268,6 +266,7 @@
             this.searchBtn.TabIndex = 4;
             this.searchBtn.Text = "Search";
             this.searchBtn.UseVisualStyleBackColor = true;
+            this.searchBtn.Click += new System.EventHandler(this.searchBtn_Click);
             // 
             // generateBtn
             // 

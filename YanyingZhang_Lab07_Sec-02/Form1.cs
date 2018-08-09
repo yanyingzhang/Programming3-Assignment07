@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -17,18 +18,23 @@ namespace YanyingZhang_Lab07_Sec_02
             InitializeComponent();
         }
 
-        private void calculateBtn_Click(object sender, EventArgs e)
+        private async void calculateBtn_Click(object sender, EventArgs e)
         {
             try
             {
-                // input should be >=0
-                int result = 1;
-                int inputNumber = Convert.ToInt32(calculateTxt.Text);
-                for (int i = 1; i <= inputNumber; i++)
+                long inputNumber = Convert.ToInt64(calculateTxt.Text);
+                string output = null;
+                if (inputNumber < 0)
                 {
-                    result = i * result;
+                    output = "You cannot put a negative value";
                 }
-                calculateResult.Text = result.ToString();
+                else
+                {
+                    Task<long> factorialTask = Task.Run(() => Factorial(inputNumber));
+                    await factorialTask;
+                    output = factorialTask.Result.ToString();
+                }
+                calculateResult.Text = output;
                 
             }
             catch(Exception ex)
@@ -36,6 +42,17 @@ namespace YanyingZhang_Lab07_Sec_02
                 calculateResult.Text = ex.Message;
             }
         }
+
+        private long Factorial(long num)
+        {
+            long result = 1;
+            for (int i = 1; i <= num; i++)
+            {
+                result = i * result;
+            }
+            return result;
+        }
+
 
         public delegate bool NumberCheck(int number);
         private static bool IsEven(int number) => number % 2 == 0;
@@ -50,15 +67,22 @@ namespace YanyingZhang_Lab07_Sec_02
                 string result = null;
 
                 int inputNumber = Convert.ToInt32(checkTxt.Text);
-                if (evenCheck(inputNumber))
+                if (inputNumber < 0)
                 {
-                    result = " is an even number.";
+                    result = "You cannot put a negative value";
                 }
-                if (oddCheck(inputNumber))
+                else
                 {
-                    result = " is an odd number.";
+                    if (evenCheck(inputNumber))
+                    {
+                        result = checkTxt.Text + " is an even number.";
+                    }
+                    if (oddCheck(inputNumber))
+                    {
+                        result = checkTxt.Text + " is an odd number.";
+                    }
                 }
-                checkResult.Text = checkTxt.Text + result;
+                checkResult.Text = result;
             }
             catch(Exception ex)
             {
@@ -66,21 +90,76 @@ namespace YanyingZhang_Lab07_Sec_02
             }
         }
 
+        public List<int> intList = new List<int>();
+        public List<double> doubleList = new List<double>();
+        public List<char> charList = new List<char>();
+        Random random = new Random();
 
         private void generateBtn_Click(object sender, EventArgs e)
         {
-            Random random = new Random();
+            displayListView.Items.Clear();
+            if (intRdb.Checked)
+            {
+                GenerateValues(intList);
+            }
+            if (doubleRdb.Checked)
+            {
+                GenerateValues(doubleList);
+            }
+            if(charRdb.Checked)
+            {
+                GenerateValues(charList);
+            }
+        }
+
+        private void GenerateValues(List<int> intList)
+        {
             int value;
-            //int[] numberList = new int[10];
-            List<int> numberList = new List<int>();
+            intList.Clear();
             for (int i = 0; i < 10; i++)
             {
                 value = random.Next(10, 100);
-                numberList.Add(value);
+                intList.Add(value);
                 displayListView.Items.Add(value.ToString());
             }
-            
         }
 
+        private void GenerateValues(List<double> doubleList)
+        {
+            double value;
+            doubleList.Clear();
+            for (int i = 0; i < 10; i++)
+            {
+                value = Math.Round((random.NextDouble() + random.Next(10,100)), 2);
+                doubleList.Add(value);
+                displayListView.Items.Add(value.ToString());
+            }
+        }
+
+        private void GenerateValues(List<char> charList)
+        {
+            char value;
+            charList.Clear();
+            for (int i = 0; i < 10; i++)
+            {
+                value = (char)(random.Next(26) + 'a');
+                charList.Add(value);
+                displayListView.Items.Add(value.ToString());
+            }
+        }
+
+
+        private void searchBtn_Click(object sender, EventArgs e)
+        {
+            int searchValue = Convert.ToInt32(searchTxt.Text);
+            if (intList.Contains(searchValue))
+            {
+                MessageBox.Show("is found");
+            }
+            else
+            {
+                MessageBox.Show("is not found");
+            }
+        }
     }
 }
