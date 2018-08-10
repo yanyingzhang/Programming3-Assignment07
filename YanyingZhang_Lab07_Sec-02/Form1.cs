@@ -30,7 +30,7 @@ namespace YanyingZhang_Lab07_Sec_02
                     output = "You cannot put a negative value";
                 }
                 else
-                {
+                {                    
                     Task<long> factorialTask = Task.Run(() => Factorial(inputNumber));
                     await factorialTask;
                     output = factorialTask.Result.ToString();
@@ -99,9 +99,7 @@ namespace YanyingZhang_Lab07_Sec_02
         bool intCheck = false;
         bool doubleCheck = false;
         bool charCheck = false;
-
-        Random random = new Random();
-
+        
         private void generateBtn_Click(object sender, EventArgs e)
         {
             displayListView.Items.Clear();
@@ -130,6 +128,8 @@ namespace YanyingZhang_Lab07_Sec_02
                 charCheck = true;
             }
         }
+
+        Random random = new Random();
 
         private void GenerateValues(List<int> intList)
         {
@@ -170,30 +170,42 @@ namespace YanyingZhang_Lab07_Sec_02
         // GroupBox 3 - Search value
         private void searchBtn_Click(object sender, EventArgs e)
         {
-            string searchValue = searchTxt.Text;
-            bool containValue = false;
-            if (intCheck == true)
+            try
             {
-                containValue = SearchData(intList, searchValue);
-            }
-            if (doubleCheck == true)
-            {
-                containValue = SearchData(doubleList, searchValue);
-                
-            }
-            if (charCheck == true)
-            {
-                containValue = SearchData(charList, searchValue);
-                
-            }
+                string searchValue = searchTxt.Text;
+                if (searchValue == "")
+                {
+                    MessageBox.Show("Empty input.");
+                }
+                else
+                {
+                    bool containValue = false;
+                    if (intCheck == true)
+                    {
+                        containValue = SearchData(intList, searchValue);
+                    }
+                    if (doubleCheck == true)
+                    {
+                        containValue = SearchData(doubleList, searchValue);
+                    }
+                    if (charCheck == true)
+                    {
+                        containValue = SearchData(charList, searchValue);
+                    }
 
-            if (containValue == true)
+                    // output the result
+                    if (containValue == true)
+                    {
+                        MessageBox.Show(searchValue + " is found in the list.");
+                    }
+                    else
+                    {
+                        MessageBox.Show(searchValue + " is not found in the list.");
+                    }
+                }
+            }catch(Exception ex)
             {
-                MessageBox.Show(searchValue + " is found");
-            }
-            else
-            {
-                MessageBox.Show(searchValue + " is not found");
+                MessageBox.Show(ex.Message);
             }
         }
 
